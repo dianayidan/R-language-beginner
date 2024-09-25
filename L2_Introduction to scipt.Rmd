@@ -1,0 +1,91 @@
+---
+title: "R markdown L2_Introduction to scipt"
+author: "Yidan Zhang"
+date: "2024-09-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r enter data} 
+#注意细节，等号后面（赋值），如果是文字或者object记得加上""双引号，如果是数字不需要加。
+# some housekeeping
+rm(list = ls()) # remove objects currently held in the environment 
+# these are the lengths of my digit on my left and right hands. # measures in mm
+
+left = c(5.8,7.5,8,6.3,7.2,5.1)
+
+right = c(5.7,7.3,8.3,7.0,5.6,7.4)
+
+# class function determines object type, class函数，表示种类
+class(left)
+class(right)
+
+# cbind function  - bind vectors of equal length! ###前提：保证x和y的数量是一致的，才可以使用cbind函数
+cbind(left,right)
+```
+
+```{r scatter_fingers }
+# bundle the fingers together into a single vector by concatenate them ，C函数，表示放在一起
+fingers = c( left, right )
+
+# rep()function 复制函数replicates an entry,rep(1,5)means replicate 1 for 5 times
+hand = c( rep(1 , 6) , rep(2 , 6))
+
+#plot the raw data,grouped by each hand
+plot(fingers , hand)
+
+# increase the x axis limit，lim函数，对x和y进行数值限制，
+plot(fingers , hand, xlim = c(2,9), ylim= c(0,2))
+
+```
+```{r boxplot}
+boxplot(fingers ~ hand)
+
+# open a new figure for plotting，boxplot函数，
+boxplot(fingers,hand, xlab="hand",ylab="digit length(cm)")
+```
+```{r scatter_plot}
+# type(pty) to be in square, # ?par for more help and option
+par(pty = "s")
+
+# plot one variable against another, 一般赋值或区间用函数C 表示combine.
+# asp函数，表示 x/y的比值或称为斜率
+
+plot(right, left, xlab = "left hand", ylab = "right hand",
+     xlim = c(5,10), ylim = c(5,10), asp = 1.5)
+
+# draws the 1:1 line of perfect symmetry, abline函数，(a= intercept截距, b= slope斜率)
+abline(a = 0, b =1)
+```
+```{r histograms}
+hist(left)
+hist(right)
+```
+```{r multipanel_histograms}
+#set up a multipanel figure, with 1 row and 2 columns，mfrow函数，表示
+par(mfrow= c(1,2))
+
+# with breaks =16, define number of bins on x asis
+hist(left, breaks = 16, col="lightgreen",main = "Breaks= 16")
+hist(right, breaks = 16, col="lightblue",main = "Breaks= 10")
+```
+```{r summaries}
+summary(left)
+summary(right)
+```
+```{r save_data, eval=FALSE}
+
+ls()# see all the data present
+
+save(list=ls(),file = "self_study Intro_to_scripts/finger_data.rdata")
+```
+
